@@ -1,0 +1,20 @@
+apiVersion: chaos-mesh.org/v1alpha1
+kind: DNSChaos
+metadata:
+  name: microservices-demo-dns-error
+  namespace: defalt
+spec:
+  action: error # the specific chaos action to inject
+  patterns:
+    - "*service.default.svc.cluster.local"
+
+  mode: one # the mode to run chaos action; supported modes are one/all/fixed/fixed-percent/random-max-percent
+  selector: # pods where to inject chaos actions
+    namespaces:
+      - default
+    labelSelectors:
+      'app': 'front-end' # the label of the pod for chaos injection
+  dnsServer:
+    name: "chaos-dns-server"
+    port: 9953
+  duration: '1m'
